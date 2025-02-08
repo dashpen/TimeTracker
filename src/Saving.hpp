@@ -3,7 +3,7 @@
 
 using namespace geode::prelude;
 
-class Saving {
+class SaveUtils {
 public:
 	static void addTime(GJGameLevel* level, const std::vector<int>& times);
 };

@@ -2,7 +2,7 @@
 #include "Saving.hpp"
 using namespace geode::prelude;
 
-void Saving::addTime(GJGameLevel* level, const std::vector<int>& times) {
+void SaveUtils::addTime(GJGameLevel* level, const std::vector<int>& times) {
 	if (level->m_levelType != GJLevelType::Saved) return; //todo: add support for editor, default, local levels
 	std::vector<int> savedTimes = Mod::get()->getSavedValue<std::vector<int>>(std::to_string(level->m_levelID.value()));
 	if (savedTimes.empty()) {

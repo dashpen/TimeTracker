@@ -4,7 +4,6 @@
 #include <Geode/Geode.hpp>
 #include "Saving.hpp"
 
-
 using namespace geode::prelude;
 
 #include <Geode/modify/LevelInfoLayer.hpp>
@@ -24,7 +23,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 
 		timeSettings->setID("time-settings-button"_spr);
 
-		menu->updateLayout();
+		menu->updateLayout(false);
 
 		log::debug("Hello! This is a debug message in init!");
 
@@ -82,7 +81,7 @@ class $modify(PlayLayer) {
 		int secondsPlayed = seconds.count();
 		int secondsPaused = m_fields->m_pauseTime.count();
 		std::vector<int> times = { secondsPlayed, secondsPaused };
-		Saving::addTime(m_level, times);
+		SaveUtils::addTime(m_level, times);
 		//log::info("now: {}, duration: {}, seconds: {}", now.time_since_epoch(), duration, seconds);
 		//log::info("Is the game paused? {}!", m_isPaused);
 		PlayLayer::~PlayLayer();

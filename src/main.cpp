@@ -15,22 +15,39 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		auto timeSettings = CCMenuItemSpriteExtra::create(
 			CCSprite::createWithSpriteFrameName("GJ_likeBtn_001.png"),
 			this,
-			menu_selector(MyLevelInfoLayer::onMyButton)
+			menu_selector(MyLevelInfoLayer::onTimeSettings)
 		);
 
 		auto menu = this->getChildByID("left-side-menu");
 		menu->addChild(timeSettings);
 
-		timeSettings->setID("time-settings-button"_spr);
+		timeSettings->setID("time-settings"_spr);
 
-		menu->updateLayout(false);
-
-		log::debug("Hello! This is a debug message in init!");
+		menu->updateLayout(true);
 
 		return true;
 	}
-	void onMyButton(CCObject*) {
-		FLAlertLayer::create("Geode", "Hello from my custom mod!", "OK")->show();
+	void onTimeSettings(CCObject*) {
+		gd::string message;
+		std::vector<int> timeObj = Mod::get()->getSavedValue<std::vector<int>>(std::to_string(m_level->m_levelID.value()), std::vector<int>());
+
+		if (!timeObj.empty()) {
+			int seconds = timeObj[0];
+			int minutes = seconds / 60;
+			int hours = seconds / 3600;
+			message = "Time played: ";
+			message += std::to_string(hours) + " hours, ";
+			message += std::to_string(minutes) + " minutes, ";
+			message += std::to_string(seconds) + " seconds";
+		} else {
+			message = "No time recorded";
+		}
+
+		if (m_level->m_levelType != GJLevelType::Saved) {
+			message = "This level type is not supported";
+		} // shouldn't happen but just in case
+
+		FLAlertLayer::create("Time Played", message, "OK")->show();
 	}
 };
 
@@ -58,12 +75,6 @@ class $modify(PlayLayer) {
 
 		m_fields->m_sessionStart = std::chrono::steady_clock::now();
 
-		//log::info("level: {}", m_level->m_levelID.value());
-		//log::info("level: {}", m_level->m_levelName);
-		//log::info("level type local?: {}", m_level->m_levelType == GJLevelType::Local);
-		//log::info("level type saved?: {}", m_level->m_levelType == GJLevelType::Saved);
-		//log::info("level type default?: {}", m_level->m_levelType == GJLevelType::Default);
-
 		return true;
 	}
 
@@ -71,19 +82,17 @@ class $modify(PlayLayer) {
 		std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 		std::chrono::duration duration = now - m_fields->m_sessionStart;
 		std::chrono::seconds seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
-		//double times = seconds.count();
 
 		if(m_isPaused && m_fields->m_loggingPaused) m_fields->updatePauseTime();
 		log::info("time played: {}, hours: {}", seconds, std::chrono::duration_cast<std::chrono::hours>(seconds));
 		log::info("time paused: {}, hours: {}", m_fields->m_pauseTime, std::chrono::duration_cast<std::chrono::hours>(m_fields->m_pauseTime));
 
-
 		int secondsPlayed = seconds.count();
 		int secondsPaused = m_fields->m_pauseTime.count();
-		std::vector<int> times = { secondsPlayed, secondsPaused };
+
+		std::vector<int> times = {secondsPlayed, secondsPaused};
 		SaveUtils::addTime(m_level, times);
-		//log::info("now: {}, duration: {}, seconds: {}", now.time_since_epoch(), duration, seconds);
-		//log::info("Is the game paused? {}!", m_isPaused);
+
 		PlayLayer::~PlayLayer();
 	}
 	void onExit() {
@@ -100,12 +109,10 @@ class $modify(PlayLayer) {
 		m_fields->m_pausePoint = std::chrono::steady_clock::now();
 		m_fields->m_loggingPaused = true;
 		log::info("pauseGame: {}", bl);
-		//Mod::get()->setSavedValue<float>("my-saved-value", .5f);
 	}
 	void resume() {
 		PlayLayer::resume();
 		m_fields->updatePauseTime();
 		log::info("resume");
-		//log::info("float: {}", Mod::get()->getSavedValue<float>("my-saved-value"));
 	}
 };

@@ -12,5 +12,4 @@ void SaveUtils::addTime(GJGameLevel* level, const std::vector<int>& times) {
 	savedTimes[0] += times[0];
 	savedTimes[1] += times[1];
 	Mod::get()->setSavedValue<std::vector<int>>(std::to_string(level->m_levelID.value()), savedTimes);
-
 }

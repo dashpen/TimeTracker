@@ -10,5 +10,10 @@
 	"name": "TimeTracker",
 	"version": "v1.0.0",
 	"developer": "water leaf",
-	"description": ""
+	"description": "",
+	"resources": {
+		"sprites": [
+			"resources/ttbuttonmidlinedark.png"
+		]
+	}
 }

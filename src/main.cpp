@@ -13,7 +13,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (!LevelInfoLayer::init(level, challenge)) return false;
 
 		auto timeSettings = CCMenuItemSpriteExtra::create(
-			CCSprite::createWithSpriteFrameName("GJ_likeBtn_001.png"),
+			CCSprite::create("ttbuttonmidlinedark.png"_spr),
 			this,
 			menu_selector(MyLevelInfoLayer::onTimeSettings)
 		);
@@ -37,8 +37,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			int hours = seconds / 3600;
 			message = "Time played: ";
 			message += std::to_string(hours) + " hours, ";
-			message += std::to_string(minutes) + " minutes, ";
-			message += std::to_string(seconds) + " seconds";
+			message += std::to_string(minutes % 60) + " minutes, ";
+			message += std::to_string(seconds % 60) + " seconds";
 		} else {
 			message = "No time recorded";
 		}

@@ -7,8 +7,8 @@
 		"ios": "2.2074"
 	},
 	"id": "water_leaf.timetracker",
-	"name": "TimeTracker",
-	"version": "v1.0.0",
+	"name": "Time Tracker",
+	"version": "v0.8.0",
 	"settings": {
 		"time-format-title": {
 			"type": "title",
@@ -44,7 +44,7 @@
 		}
 	},
 	"developer": "water leaf",
-	"description": "",
+	"description": "Tracks your time played in each level",
 	"resources": {
 		"sprites": [
 			"resources/TTSettingsButton.png"

@@ -61,7 +61,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				char buffer[20];
 				std::sprintf(buffer, "%.3f", seconds / 3600.0f);
 				if (hhmmssFormat) description += "or ";
-				description += gd::string(buffer) + " hours\n";
+				description.append(buffer);
+				description += " hours\n";
 			}
 		}
 		if (timeWithoutPaused) {
@@ -79,7 +80,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 				char buffer[20];
 				std::sprintf(buffer, "%.3f", seconds / 3600.0f);
 				if (hhmmssFormat) description += "or ";
-				description += gd::string(buffer) + " hours\n";
+				description.append(buffer);
+				description += " hours\n";
 			}
 		}
 		FLAlertLayer::create("Time Played", description, "OK")->show();

@@ -1,3 +1,4 @@
-# Template Mod
+# Time Tracker
 
-Edit about.md to change this
+This mod tracks the time you spent in levels! Use the stopwatch on the left menu to see your time.
+Note: Only tracks time spent after mod is installed

@@ -13,7 +13,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		if (!LevelInfoLayer::init(level, challenge)) return false;
 
 		auto timeSettings = CCMenuItemSpriteExtra::create(
-			CCSprite::create("ttbuttonmidlinedark.png"_spr),
+			CCSprite::create("TTSettingsButton.png"_spr),
 			this,
 			menu_selector(MyLevelInfoLayer::onTimeSettings)
 		);
@@ -23,36 +23,70 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 
 		timeSettings->setID("time-settings"_spr);
 
-		menu->updateLayout(true);
+		menu->updateLayout();
 
 		return true;
 	}
 	void onTimeSettings(CCObject*) {
-		gd::string message;
+		gd::string description;
 		std::vector<int> timeObj = Mod::get()->getSavedValue<std::vector<int>>(std::to_string(m_level->m_levelID.value()), std::vector<int>());
 
-		if (!timeObj.empty()) {
+		if (timeObj.empty()) {
+			FLAlertLayer::create("Time Played", "<cr>No time recorded</c>", "OK")->show();
+			return;
+		}
+
+		bool hhmmssFormat = Mod::get()->getSettingValue<bool>("hhmmss-time-format");
+		bool hoursFormat = Mod::get()->getSettingValue<bool>("hours-only-time-format");
+		bool timeWithPaused = Mod::get()->getSettingValue<bool>("time-with-paused");
+		bool timeWithoutPaused = Mod::get()->getSettingValue<bool>("time-without-paused");
+
+		if (!(timeWithoutPaused && timeWithPaused)) {
+			FLAlertLayer::create("Time Played", "You need to select either total time or time excluding pause time in settings!", "OK")->show();
+			return;
+		}
+
+		if (timeWithPaused) {
 			int seconds = timeObj[0];
 			int minutes = seconds / 60;
 			int hours = seconds / 3600;
-			message = "Time played: ";
-			message += std::to_string(hours) + " hours, ";
-			message += std::to_string(minutes % 60) + " minutes, ";
-			message += std::to_string(seconds % 60) + " seconds";
-		} else {
-			message = "No time recorded";
+
+			description += "<cy>Total Time</c>:\n";
+			if (hhmmssFormat) {
+				description += std::to_string(hours) + " hours, ";
+				description += std::to_string(minutes % 60) + " minutes, ";
+				description += std::to_string(seconds % 60) + " seconds\n";
+			}
+			if (hoursFormat) {
+				char buffer[20];
+				std::sprintf(buffer, "%.3f", seconds / 3600.0f);
+				if (hhmmssFormat) description += "or ";
+				description += gd::string(buffer) + " hours\n";
+			}
 		}
+		if (timeWithoutPaused) {
+			int seconds = timeObj[0] - timeObj[1];
+			int minutes = seconds / 60;
+			int hours = seconds / 3600;
 
-		if (m_level->m_levelType != GJLevelType::Saved) {
-			message = "This level type is not supported";
-		} // shouldn't happen but just in case
-
-		FLAlertLayer::create("Time Played", message, "OK")->show();
+			description += "<cy>Time excluding pause menu</c>:\n";
+			if (hhmmssFormat) {
+				description += std::to_string(hours) + " hours, ";
+				description += std::to_string(minutes % 60) + " minutes, ";
+				description += std::to_string(seconds % 60) + " seconds\n";
+			}
+			if (hoursFormat) {
+				char buffer[20];
+				std::sprintf(buffer, "%.3f", seconds / 3600.0f);
+				if (hhmmssFormat) description += "or ";
+				description += gd::string(buffer) + " hours\n";
+			}
+		}
+		FLAlertLayer::create("Time Played", description, "OK")->show();
 	}
 };
 
 #include <Geode/modify/PlayLayer.hpp>
-//#include <Geode/modify/GJGameLevel.hpp>
 #include <chrono>
 
 class $modify(PlayLayer) {
@@ -84,8 +118,6 @@ class $modify(PlayLayer) {
 		std::chrono::seconds seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
 
 		if(m_isPaused && m_fields->m_loggingPaused) m_fields->updatePauseTime();
-		log::info("time played: {}, hours: {}", seconds, std::chrono::duration_cast<std::chrono::hours>(seconds));
-		log::info("time paused: {}, hours: {}", m_fields->m_pauseTime, std::chrono::duration_cast<std::chrono::hours>(m_fields->m_pauseTime));
 
 		int secondsPlayed = seconds.count();
 		int secondsPaused = m_fields->m_pauseTime.count();
@@ -95,24 +127,18 @@ class $modify(PlayLayer) {
 
 		PlayLayer::~PlayLayer();
 	}
-	void onExit() {
-		PlayLayer::onExit();
-		log::info("onExit");
-	}
+
 	void onQuit() {
 		PlayLayer::onQuit();
 		m_fields->updatePauseTime();
-		log::info("onQuit");
 	}
 	void pauseGame(bool bl) {
 		PlayLayer::pauseGame(bl);
 		m_fields->m_pausePoint = std::chrono::steady_clock::now();
 		m_fields->m_loggingPaused = true;
-		log::info("pauseGame: {}", bl);
 	}
 	void resume() {
 		PlayLayer::resume();
 		m_fields->updatePauseTime();
-		log::info("resume");
 	}
 };

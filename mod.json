@@ -9,11 +9,45 @@
 	"id": "water_leaf.timetracker",
 	"name": "TimeTracker",
 	"version": "v1.0.0",
+	"settings": {
+		"time-format-title": {
+			"type": "title",
+			"name": "Time Formats"
+		},
+		"hhmmss-time-format": {
+			"type": "bool",
+			"name": "Hours, minutes, seconds format",
+			"description": "Shows time played in hours, minutes, and seconds, such as in the format\n'Time played: 12 hours, 34 minutes, 56 seconds'\nBoth settings can be selected at the same time",
+			"default": true
+		},
+		"hours-only-time-format": {
+			"type": "bool",
+			"name": "Hours format",
+			"description": "Shows time played in hours, such as in the format\n'Time played: 3.14 hours'\nBoth settings can be selected at the same time",
+			"default": false
+		},
+		"paused-settins-title": {
+			"type": "title",
+			"name": "Time Paused"
+		},
+		"time-with-paused": {
+			"type": "bool",
+			"name": "Total play time format",
+			"description": "Show a time format with the time paused included\nBoth settings can be selected at the same time",
+			"default": true
+		},
+		"time-without-paused": {
+			"type": "bool",
+			"name": "Excluding paused time format",
+			"description": "Show a time format with the time paused excluded\nBoth settings can be selected at the same time",
+			"default": false
+		}
+	},
 	"developer": "water leaf",
 	"description": "",
 	"resources": {
 		"sprites": [
-			"resources/ttbuttonmidlinedark.png"
+			"resources/TTSettingsButton.png"
 		]
 	}
 }

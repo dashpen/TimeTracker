@@ -28,7 +28,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		return true;
 	}
 	void onTimeSettings(CCObject*) {
-		gd::string description;
+		std::string description;
 		std::vector<int> timeObj = Mod::get()->getSavedValue<std::vector<int>>(std::to_string(m_level->m_levelID.value()), std::vector<int>());
 
 		if (timeObj.empty()) {
@@ -41,8 +41,8 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		bool timeWithPaused = Mod::get()->getSettingValue<bool>("time-with-paused");
 		bool timeWithoutPaused = Mod::get()->getSettingValue<bool>("time-without-paused");
 
-		if (!(timeWithoutPaused && timeWithPaused)) {
-			FLAlertLayer::create("Time Played", "You need to select either total time or time excluding pause time in settings!", "OK")->show();
+		if (!(timeWithoutPaused || timeWithPaused)) {
+			FLAlertLayer::create("Time Played", "You need to select either total time or excluding paused time in settings!", "OK")->show();
 			return;
 		}
 
@@ -70,7 +70,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 			int minutes = seconds / 60;
 			int hours = seconds / 3600;
 
-			description += "<cy>Time excluding pause menu</c>:\n";
+			description += "<cy>Time Excluding Pause Menu</c>:\n";
 			if (hhmmssFormat) {
 				description += std::to_string(hours) + " hours, ";
 				description += std::to_string(minutes % 60) + " minutes, ";

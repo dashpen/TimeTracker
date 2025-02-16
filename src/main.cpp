@@ -12,6 +12,10 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 
 		if (!LevelInfoLayer::init(level, challenge)) return false;
 
+		bool enableButton = Mod::get()->getSettingValue<bool>("enable-button");
+
+		if (!enableButton) return true;
+
 		auto timeSettings = CCMenuItemSpriteExtra::create(
 			CCSprite::create("TTSettingsButton.png"_spr),
 			this,
@@ -42,7 +46,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 		bool timeWithoutPaused = Mod::get()->getSettingValue<bool>("time-without-paused");
 
 		if (!(timeWithoutPaused || timeWithPaused)) {
-			FLAlertLayer::create("Time Played", "You need to select either total time or excluding paused time in settings!", "OK")->show();
+			FLAlertLayer::create("Time Played", "You need to select either a 'total time' or 'excluding paused time' option in settings!", "OK")->show();
 			return;
 		}
 

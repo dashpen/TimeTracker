@@ -10,6 +10,12 @@
 	"name": "Time Tracker",
 	"version": "v0.8.0",
 	"settings": {
+		"enable-button": {
+			"type": "bool",
+			"name": "Enable Button",
+			"description": "Enbables the button on the left menu, allowing you to see your playtime",
+			"default": true
+		},
 		"time-format-title": {
 			"type": "title",
 			"name": "Time Formats"

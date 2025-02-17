@@ -8,7 +8,7 @@
 	},
 	"id": "water_leaf.timetracker",
 	"name": "Time Tracker",
-	"version": "v0.8.0",
+	"version": "v0.8.1",
 	"settings": {
 		"enable-button": {
 			"type": "bool",
@@ -50,6 +50,7 @@
 		}
 	},
 	"developer": "water leaf",
+	"repository": "https://github.com/dashpen/TimeTracker",
 	"description": "Tracks your time played in each level",
 	"resources": {
 		"sprites": [

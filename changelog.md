@@ -1,3 +1,6 @@
+# 0.8.1
+- Updating binaries
+
 # 0.8.0
 - Released
 - Tracking for total time in level and time spent paused

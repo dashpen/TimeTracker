@@ -1,7 +1,3 @@
-/**
- * Include the Geode headers.
- */
-#include <Geode/Geode.hpp>
 #include "SaveUtils.hpp"
 
 using namespace geode::prelude;
@@ -12,9 +8,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
 
 		if (!LevelInfoLayer::init(level, challenge)) return false;
 
-		bool enableButton = Mod::get()->getSettingValue<bool>("enable-button");
-
-		if (!enableButton) return true;
+		if (!Mod::get()->getSettingValue<bool>("enable-button")) return true;
 
 		auto timeSettings = CCMenuItemSpriteExtra::create(
 			CCSprite::create("TTSettingsButton.png"_spr),
@@ -135,16 +129,16 @@ class $modify(PlayLayer) {
 	}
 
 	void onQuit() {
-		PlayLayer::onQuit();
 		m_fields->updatePauseTime();
+		PlayLayer::onQuit();
 	}
 	void pauseGame(bool bl) {
-		PlayLayer::pauseGame(bl);
 		m_fields->m_pausePoint = std::chrono::steady_clock::now();
 		m_fields->m_loggingPaused = true;
+		PlayLayer::pauseGame(bl);
 	}
 	void resume() {
-		PlayLayer::resume();
 		m_fields->updatePauseTime();
+		PlayLayer::resume();
 	}
 };

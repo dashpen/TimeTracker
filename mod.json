@@ -8,7 +8,7 @@
 	},
 	"id": "water_leaf.timetracker",
 	"name": "Time Tracker",
-	"version": "v0.8.1",
+	"version": "v0.8.2",
 	"settings": {
 		"enable-button": {
 			"type": "bool",

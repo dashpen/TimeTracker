@@ -1,3 +1,6 @@
+# 0.8.2
+- Fixed bug with crashing on the play layer
+
 # 0.8.1
 - Updating binaries
 
